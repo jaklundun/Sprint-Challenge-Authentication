@@ -28,7 +28,18 @@ function generateToken(user) {
 
 function register(req, res) {
   // implement user registration
-}
+ const creds = req.body;
+ const hash = bcrypt.hashSync(creds.password, 8); 
+ creds.password = hash;
+
+ db('users')
+   .insert(creds)
+   .then(ids => {
+     res.status(201).json(ids);
+   })
+   .catch(err => json(err));
+};
+
 
 function login(req, res) {
   // implement user login
